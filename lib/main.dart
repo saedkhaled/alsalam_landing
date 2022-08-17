@@ -1,13 +1,14 @@
 import 'dart:async';
 
 import 'package:alsalam_landing/app.dart';
+import 'package:alsalam_landing/app_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 final sl = GetIt.instance;
 
 registerLazySingleton() {
-  // sl.registerLazySingleton<LocalStorageSource>(() => LocalStorage());
+  sl.registerLazySingleton<AppProvider>(() => AppProvider());
 }
 
 void main() async {
