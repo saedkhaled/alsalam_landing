@@ -1,35 +1,29 @@
+import 'dart:async';
+
+import 'package:alsalam_landing/app.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
-void main() {
-  runApp(const MyApp());
+final sl = GetIt.instance;
+
+registerLazySingleton() {
+  // sl.registerLazySingleton<LocalStorageSource>(() => LocalStorage());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+void main() async {
+  // catch errors
+  await runZonedGuarded<Future<void>>(() async {
+    FlutterError.onError = (FlutterErrorDetails details) {
+      FlutterError.presentError(details);
+      Zone.current.handleUncaughtError(details.exception, details.stack!);
+    };
+    // make sure binding initialized before calling [runApp]
+    WidgetsFlutterBinding.ensureInitialized();
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(),
-      ),
-    );
-  }
+    // Register Singleton Data
+    registerLazySingleton();
+    runApp(const MyApp());
+  }, (e, s) {
+    // implement error handling
+  });
 }
